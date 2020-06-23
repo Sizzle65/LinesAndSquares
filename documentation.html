@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link type="text/css" rel="stylesheet" href="style.css"/>
+	<title>Project 2</title>
+</head>
+<body>
+	<h1>Lines and Squares</h1>
+	<a href="project2.html">Go To Game</a>
+
+<section>
+	<h2 id="page">Documentation</h2>
+	
+	<h2>I. Process</h2>
+	<p class="info">The development of the game has continued at a steady pace, and is essentially at completion. In terms of playability, it’s in a good place, and has been for a few days. The bulk of my work over the last 4 days has been optimization, UI improvements, and user customization.</p>
+	<p class="info">None of these are vital for the functioning of the game, but are important for user engagement and the above and beyond aspect of the project. There will likely continue to be minor improvements to UI and user customization, but the bulk of the project is complete. 
+	</p>
+	
+	<h2>II. Resources</h2>
+	<p class="info">My resources were mostly the past assignments we completed in class, and the corresponding lessons on JS, HTML and CSS.  In addition, I utilized a few posts from W3Schools and StackOverflow for general ideas on how to solve small problems I was having.</p>
+	
+	<h2>III. Notes</h2>
+	<p class="info">I never implemented the ability for the users to select both the number of columns and the number of rows separately. In addition, the responsivity of the site is slightly lacking, resulting in broken grids if the size gets too large. To counter this, I added a cap that displays an error to the user if they exceed it. </p>
+	
+	<h2>IV. Requirements</h2>
+	<p class="info">All the requirements of the project have been thoroughly met, everything validates, and overall the project is a good showcase of the JS, HTML and CSS skills I have learned. In addition, I believe the above and beyond aspects have been reached through the use of my grid creation method.</p>
+</section>
+<footer>Copyright 2017 Sam Belisle</footer>
+<script>
+	let foot = document.querySelector("footer");
+	
+	let setFoot = (e) => {
+		foot.style.position = "relative";
+	}
+	
+	window.onload = setFoot;
+</script>
+</body>
+</html>

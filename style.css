@@ -1,0 +1,131 @@
+section{
+	text-align:center;
+	margin-top:20px;
+	margin-left:300px;
+	margin-right:300px;
+	margin-bottom:50px;
+	padding-top:1em;
+	height:100%;
+	color:white;
+}
+section{
+	background-repeat:no-repeat;
+	background-position:center center;
+}
+footer{
+	position:absolute;
+	text-align:center;
+	bottom:0;
+	left:0;
+	right:0;
+	height: 25px;
+	overflow:hidden;
+	color:white;
+}
+body{
+	font-family:sans-serif;
+	background-color:gray;
+
+}
+
+.box{
+	display:inline-block;
+	padding:50px;
+	margin-left:2px;
+	margin-right:2px;
+	margin-top:0;
+	margin-bottom:0;
+	
+}
+.lineH{
+	background-color:white;
+	display:inline-block;
+	padding-left:51px;
+	padding-right:51px;
+	margin-bottom:0;
+	margin-top:0;
+	height:10px;
+	margin-left:7px;
+	margin-right:7px;
+}
+.lineV{
+	background-color:white;
+	display:inline-block;
+	padding-left:5px;
+	padding-right:5px;
+	margin-bottom:0;
+	margin-top:0;
+	height:100px;
+}
+div{
+	margin:0;
+}
+h1{
+	font-size:200%;
+	background-color:black;
+	width:100%;
+	color:white;
+	text-align:center;
+	margin:0;
+	position:fixed;
+	top:0;
+	left:0;
+}
+h2{
+	font-size:150%;
+}
+h3{
+	font-size:80%;
+}
+#button{
+	margin-top:10px;
+}
+#leftScore{
+	float:left;
+	position:fixed;
+	top:100px;
+	left:50px;
+	font-size:200%;
+	color:white;
+}
+#rightScore{
+	float:right;
+	position:fixed;
+	top:100px;
+	right:50px;
+	font-size:200%;
+	color:white;
+}
+#leftValue{
+	float:left;
+	position:fixed;
+	top:150px;
+	left:50px;
+	font-size:300%;
+	color:blue;
+}
+#rightValue{
+	float:right;
+	position:fixed;
+	top:150px;
+	right:50px;
+	font-size:300%;
+	color:orange;
+}
+#instructions{
+	margin-top:50px;
+	margin-bottom:50px;
+}
+a{
+	color:white;
+	
+	position:fixed;
+	top:8px;
+	text-decoration:none;
+}
+h2#page{
+	font-size:200%;
+}
+.info{
+	text-align:left;
+}
