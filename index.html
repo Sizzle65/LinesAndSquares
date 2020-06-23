@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link type="text/css" rel="stylesheet" href="style.css"/>
+	<title>Project 2</title>
+</head>
+<body>
+	<h1>Lines and Squares</h1>
+	<a href="documentation.html">Go To Documentation</a>
+
+<section>
+	<p id="instructions">Lines and Square is my take on the game Dots and Boxes. In this game, two players take turns selecting 
+	lines to highlight across a grid. Once all four lines are highlighted around a box, the box is filled in 
+	with the color of whichever player highlighted the last line. That player then receives a point, and takes another
+	turn. The game ends when all boxes are filled, the player with the most points wins.</p>
+	<h2>Enter Game Settings:</h2>
+	<h3>(Can only be a square grid, requires input of a single value between 1-6)</h3>
+	
+	<p id="grid">* Grid Size:</p> <input type="text" name="fname" id="field"><br id="b1">
+	<p id="n1">Player 1 Name:</p> <input type="text" name="fname" id="name1"><br id="b2">
+	<p id="n2">Player 2 Name:</p> <input type="text" name="fname" id="name2"><br id="b3">
+	<input type="submit" value="Start" id="button">
+	<p id="reminder">* Required Field</p>
+	<p id="error"></p>
+
+</section>
+<footer>Copyright 2017 Sam Belisle</footer>
+<script>
+	let gridSize = 3;
+	let hLines = document.querySelectorAll(".lineH");
+	let vLines = document.querySelectorAll(".lineV");
+	let boxes = document.querySelectorAll(".box");
+	//randomizes the starting player
+	let rand = Math.random() * 2;
+	let turn = "";
+	if(rand < 1){
+		turn = "p1"; 
+	}
+	else{
+		turn = "p2";
+	}
+	let changed = false;
+	let orangeBoxes = 0;
+	let blueBoxes = 0;
+	let button = document.querySelector("#button");
+	let end = document.querySelector("h2");
+	let p1Name = "Player 1";
+	let p2Name = "Player 2";
+	let p1Score = document.createElement("p");
+	let p1ScoreValue = document.createElement("p");
+	let p2Score = document.createElement("p");
+	let p2ScoreValue = document.createElement("p");
+	let field = document.querySelector("#field");
+	let name1 = document.querySelector("#name1");
+	let name2 = document.querySelector("#name2");
+	let error = document.querySelector("#error");
+	let foot = document.querySelector("footer");
+	let instruct = document.querySelector("#instructions");
+	let reminder = document.querySelector("#reminder")
+	
+	//when the start game button is pressed, creates the board and clears the unnecessary elements
+	button.onclick = function (e){
+		//if user enters an invalid board size, returns an error message and waits for re-entry
+		if(field.value > 6 || field.value < 1){
+			error.innerHTML = "ERROR: Invalid Grid Size, please enter a number between 1 and 6";
+			error.style.color = "red";
+			return;
+		}
+	//grabs all the values
+		gridSize = parseInt(field.value);
+		if(name1.value.length == 0){
+			p1Name = "Player 1"
+		}
+		else{
+			p1Name = name1.value;
+		}
+		if(name2.value.length == 0){
+			p2Name = "Player 2"
+		}else{
+			p2Name = name2.value;		
+		}
+		if(field.value > 4){
+			foot.style.position = "relative"
+		}
+		name1.remove();
+		name2.remove();
+		field.remove();
+		button.remove();
+		error.remove();
+		instruct.remove();
+		reminder.remove();
+		document.querySelector("h3").remove();
+		document.querySelector("#grid").remove();
+		document.querySelector("#n1").remove();
+		document.querySelector("#n2").remove();
+		document.querySelector("#b1").remove();
+		document.querySelector("#b2").remove();
+		document.querySelector("#b3").remove();
+		//calls setup to setup the board
+		setup();
+	}
+	
+	//sets up the board and game screen based on the information input from the user
+	let setup = (e) =>{
+		//lists the current players turn
+		let sect = document.querySelector("section");
+		if(turn == "p1"){
+			end.innerHTML = "Turn: " + p1Name;
+		}
+		else{
+			end.innerHTML = "Turn: " + p2Name;
+		}
+		
+		//loops through to create the divs and p elements that make up the board
+		for(let x =0;x< ((2 * gridSize)+1);x++){
+			if(x == 0 || x % 2 == 0){
+				for(let y = 0;y<gridSize;y++){
+					let p = document.createElement("p");
+					p.setAttribute("class","lineH");
+					sect.appendChild(p);
+				}
+			}
+			else{
+				let div = document.createElement("div");
+				sect.appendChild(div);
+				for(let i =0;i<((2 * gridSize)+1);i++){
+					if(i == 0 || i % 2 == 0){
+						let p = document.createElement("p");
+						p.setAttribute("class","lineV");
+						div.appendChild(p);
+
+					}
+					else{
+						let p = document.createElement("p");
+						p.setAttribute("class","box");
+						div.appendChild(p);
+
+					}
+				}
+			}
+		}
+		
+		//grabs all the board elements
+		hLines = document.querySelectorAll(".lineH");
+		vLines = document.querySelectorAll(".lineV");
+		boxes = document.querySelectorAll(".box");
+		
+		//sets up the score side-sections
+		p1Score.setAttribute("id","leftScore");
+		p1Score.innerHTML = p1Name + "'s Score:";
+		let body = document.querySelector("body");
+		body.appendChild(p1Score);
+		
+		p1ScoreValue.setAttribute("id","leftValue");
+		p1ScoreValue.innerHTML = blueBoxes;
+		body.appendChild(p1ScoreValue);
+		
+		p2Score.setAttribute("id","rightScore");
+		p2Score.innerHTML = p2Name + "'s Score:";
+		body.appendChild(p2Score);
+		
+		p2ScoreValue.setAttribute("id","rightValue");
+		p2ScoreValue.innerHTML = orangeBoxes;
+		body.appendChild(p2ScoreValue);
+		
+		//sets the box properties for the lines, which hold the index of the adjacent boxes
+		//for horizontal lines
+		for(let x = 0;x<hLines.length;x++){
+			if(x < gridSize){
+				hLines[x].dataset.box1 = x;
+				hLines[x].dataset.box2 = null;
+			}
+			else if(x > (hLines.length-gridSize)){
+				hLines[x].dataset.box1 = x-gridSize;
+				hLines[x].dataset.box2 = null;
+			}
+			else{
+				hLines[x].dataset.box1 = (x-gridSize);
+				hLines[x].dataset.box2 = x;
+			}
+		}
+	
+		let inc = 1;
+		let inc2 = 1;
+		let inc3 = 0;
+		let inc4 = 0;
+		let inc5 = 1;
+		let inc6 = 1;
+		//for vertical lines
+		for(let x= 0;x < vLines.length;x++){
+			if(x == 0){
+				vLines[x].dataset.box1 = x;
+				vLines[x].dataset.box2 = null;
+			}
+			else if(x == gridSize){
+				vLines[x].dataset.box1 = x-1;
+				vLines[x].dataset.box2 = null;
+			}
+			else if(x == (inc5*gridSize)+inc6){
+				vLines[x].dataset.box1 = x-inc;
+				vLines[x].dataset.box2 = null;
+				inc2++;
+				if(inc2 == 2){
+					inc++;
+					inc2 = 0;
+				}
+				if(inc6 < inc5){
+					inc6++;
+				}
+				else{
+					inc5++;
+				}
+			}
+			else{
+				vLines[x].dataset.box1 = x-inc3;
+				vLines[x].dataset.box2 = (x-inc3)-1;
+				inc4++;
+				if(inc4 == (gridSize-1)){
+					inc3++;
+					inc4 = 0;
+				}
+			}
+		}
+	
+
+		//sets the properties for the boxes that show whether they've been filled or not
+		for(let x = 0;x<boxes.length;x++){
+			boxes[x].dataset.filled = "false";
+			boxes[x].dataset.number = 0;
+		}
+	
+		//adds event listeners to the lines so they can change color when clicked
+		for(let x = 0;x<hLines.length;x++){
+			hLines[x].addEventListener("click",changeColor);
+		}
+		for(let x = 0;x<vLines.length;x++){
+			vLines[x].addEventListener("click",changeColor);
+		}
+			
+	}
+
+
+
+	
+	//function to allow lines to change colors, fill boxes when surrounded by filled lines, and change turns
+	let changeColor = (e) => {
+		//if a clicked line has been colored, ends the function call
+		if(e.target.style.backgroundColor == "black"){
+			return;
+		}
+		//otherwise, fills and incriments it's boxes values
+		e.target.style.backgroundColor = "black";
+		boxes[e.target.dataset.box1].dataset.number++;
+		
+		//when the boxes have a number property of 4, they are surrounded and must be filled
+		//this checks for the current player turn, and fills the corresponding color, as well as changes the score
+		if(boxes[e.target.dataset.box1].dataset.number == 4){
+			if(turn == "p1"){
+				boxes[e.target.dataset.box1].style.backgroundColor = "blue";
+				boxes[e.target.dataset.box1].dataset.filled = true;
+				blueBoxes++;
+				p1ScoreValue.innerHTML = blueBoxes;
+			}
+			if(turn == "p2"){
+				boxes[e.target.dataset.box1].style.backgroundColor = "orange";
+				boxes[e.target.dataset.box1].dataset.filled = true;
+				orangeBoxes++;
+				p2ScoreValue.innerHTML = orangeBoxes;
+			}
+			changed = true;
+			
+		}
+		
+		//does the same for the 2nd box property of the given line
+		if(boxes[e.target.dataset.box2] != null){
+			boxes[e.target.dataset.box2].dataset.number++;
+			
+			if(boxes[e.target.dataset.box2].dataset.number == 4){
+				if(turn == "p1"){
+					boxes[e.target.dataset.box2].style.backgroundColor = "blue";
+					boxes[e.target.dataset.box1].dataset.filled = true;
+					blueBoxes++;
+					p1Score++;
+					p1ScoreValue.innerHTML = blueBoxes;
+
+				}
+				if(turn == "p2"){
+					boxes[e.target.dataset.box2].style.backgroundColor = "orange";
+					boxes[e.target.dataset.box1].dataset.filled = true;
+					orangeBoxes++;
+					p2Score++;
+					p2ScoreValue.innerHTML = orangeBoxes;
+
+				}
+				changed = true;
+			}
+		}
+		
+		//once the boxes are all filled, prints out who the winner is based on the score
+		if((blueBoxes + orangeBoxes) == (gridSize * gridSize)){
+			if(blueBoxes > orangeBoxes){
+				end.innerHTML = p1Name + " Wins!";
+			}
+			else if(blueBoxes < orangeBoxes){
+				end.innerHTML = p2Name + " Wins!";
+			}
+			else{
+				end.innerHTML = "You Tied! Nobody wins, you both suck!";
+			}
+		}
+		
+		//if a box was filled by a player, doesn't switch turns and allows them to go again
+		if(changed){
+			changed = false;
+			return;
+		}
+		
+		//otherwise, switches turns
+		if(turn == "p1"){
+			turn = "p2";
+			end.innerHTML = "Turn: " + p2Name;
+		}
+		else{
+			turn = "p1";
+			end.innerHTML = "Turn: " + p1Name;
+		}
+	}
+	
+</script>
+</body>
+</html>
